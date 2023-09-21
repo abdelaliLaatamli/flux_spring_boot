@@ -32,30 +32,30 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(OwnUserDetails.fromUser( createdUser));
 
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );
-        }catch (Exception e){
-            System.out.println("*************************");
-            System.out.println( e );
-            System.out.println("**************************");
-            throw e;
-        }
+//        try {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+//        }catch (Exception e){
+//            System.out.println("*************************");
+//            System.out.println( e );
+//            System.out.println("**************************");
+//            throw e;
+//        }
 
         var user = userRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow( () -> new RuntimeException("User not found")  );
 
         var jwtToken = jwtService.generateToken(OwnUserDetails.fromUser( user ));
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
 }
