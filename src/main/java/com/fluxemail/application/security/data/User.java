@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -57,6 +58,10 @@ public class User {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
 
 }

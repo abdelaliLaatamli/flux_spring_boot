@@ -3,9 +3,7 @@ package com.fluxemail.application.web.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fluxemail.application.security.JwtService;
 import com.fluxemail.application.security.OwnUserDetails;
-import com.fluxemail.application.security.data.Role;
-import com.fluxemail.application.security.data.User;
-import com.fluxemail.application.security.data.UserRepository;
+import com.fluxemail.application.security.data.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +20,8 @@ import java.io.IOException;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -37,9 +37,11 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .isActive(true)
                 .build();
+
         var createdUser = userRepository.save(user);
         OwnUserDetails userDetails = OwnUserDetails.fromUser( createdUser );
         var jwtToken = jwtService.generateToken(userDetails);
+        saveUserToken(jwtToken, createdUser);
         var refreshToken = jwtService.generateRefreshToken(userDetails);
 
 
@@ -48,6 +50,20 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private void saveUserToken(String jwtToken, User createdUser) {
+
+        var accessToken= Token.builder()
+                .token(jwtToken)
+                .tokenType(TokenType.ACCESS)
+                .expired(false)
+                .revoked(false)
+                .user(createdUser)
+                .build();
+
+        tokenRepository.save(accessToken);
+
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -72,6 +88,8 @@ public class AuthenticationService {
 
         OwnUserDetails userDetails = OwnUserDetails.fromUser( user );
         var jwtToken = jwtService.generateToken( userDetails );
+        revokeAllUserTokens(user);
+        saveUserToken( jwtToken , user );
         var refreshToken = jwtService.generateRefreshToken(userDetails);
 
         return AuthenticationResponse
@@ -113,5 +131,20 @@ public class AuthenticationService {
               new ObjectMapper().writeValue( response.getOutputStream() , authResponse);
             }
         }
+    }
+
+    private void revokeAllUserTokens(User user){
+
+        var validTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        if(validTokens.isEmpty())
+            return;
+        validTokens.forEach(token ->{
+                token.setExpired(true);
+                token.setRevoked(true);
+        });
+
+        tokenRepository.saveAll(validTokens);
+
+
     }
 }
