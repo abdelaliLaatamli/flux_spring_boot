@@ -1,15 +1,24 @@
 package com.fluxemail.application.web.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fluxemail.application.security.JwtService;
 import com.fluxemail.application.security.OwnUserDetails;
 import com.fluxemail.application.security.data.Role;
 import com.fluxemail.application.security.data.User;
 import com.fluxemail.application.security.data.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +38,16 @@ public class AuthenticationService {
                 .isActive(true)
                 .build();
         var createdUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(OwnUserDetails.fromUser( createdUser));
+        OwnUserDetails userDetails = OwnUserDetails.fromUser( createdUser );
+        var jwtToken = jwtService.generateToken(userDetails);
+        var refreshToken = jwtService.generateRefreshToken(userDetails);
 
 
-        return AuthenticationResponse.builder().accessToken(jwtToken).build();
+        return AuthenticationResponse
+                .builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -55,7 +70,48 @@ public class AuthenticationService {
                 .findByEmail(request.getEmail())
                 .orElseThrow( () -> new RuntimeException("User not found")  );
 
-        var jwtToken = jwtService.generateToken(OwnUserDetails.fromUser( user ));
-        return AuthenticationResponse.builder().accessToken(jwtToken).build();
+        OwnUserDetails userDetails = OwnUserDetails.fromUser( user );
+        var jwtToken = jwtService.generateToken( userDetails );
+        var refreshToken = jwtService.generateRefreshToken(userDetails);
+
+        return AuthenticationResponse
+                .builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken;
+        final String userEmail;
+
+        if( authHeader == null || !authHeader.startsWith("Bearer ") ){
+            return;
+        }
+        refreshToken = authHeader.substring(7);
+        userEmail = jwtService.extractUserEmail(refreshToken);
+
+        if( userEmail != null ){
+
+            var user = this.userRepository
+                    .findByEmail(userEmail)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            var userDetails = OwnUserDetails.fromUser(user) ;
+            if (jwtService.isTokenValid(refreshToken , userDetails )){
+              var accessToken = jwtService.generateToken(userDetails);
+              var authResponse = AuthenticationResponse
+                      .builder()
+                      .accessToken(accessToken)
+                      .refreshToken(refreshToken)
+                      .build();
+                response.setHeader("Content-Type" , "application/json");
+              new ObjectMapper().writeValue( response.getOutputStream() , authResponse);
+            }
+        }
     }
 }
