@@ -122,6 +122,8 @@ public class AuthenticationService {
             var userDetails = OwnUserDetails.fromUser(user) ;
             if (jwtService.isTokenValid(refreshToken , userDetails )){
               var accessToken = jwtService.generateToken(userDetails);
+              revokeAllUserTokens(user);
+              saveUserToken( accessToken , user );
               var authResponse = AuthenticationResponse
                       .builder()
                       .accessToken(accessToken)
