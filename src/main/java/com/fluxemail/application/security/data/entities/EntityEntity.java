@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @jakarta.persistence.Entity
 //@Table( name = "_users" , schema = "_users_schema" )
 @Table(name = "_entities")
-public class Entity {
+public class EntityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +34,7 @@ public class Entity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "entity")
+    private List<User> users;
 
 }
