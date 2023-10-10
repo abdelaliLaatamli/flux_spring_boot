@@ -1,4 +1,4 @@
-package com.fluxemail.application.security.data;
+package com.fluxemail.application.security.data.repositories;
 
 import com.fluxemail.application.security.data.entities.Token;
 import org.springframework.data.jpa.repository.JpaRepository;

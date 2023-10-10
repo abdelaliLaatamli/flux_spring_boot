@@ -1,4 +1,4 @@
-package com.fluxemail.application.core.offers;
+package com.fluxemail.application.core.offers.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 //@Table(name="_offers",schema="_networks_schema")
-@Table(name="_suppression")
+@Table(name="_suppression", schema = "_affiliate")
 public class SuppressionEntity {
 
     @Id

@@ -1,6 +1,6 @@
 package com.fluxemail.application.security;
 
-import com.fluxemail.application.security.data.UserRepository;
+import com.fluxemail.application.security.data.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

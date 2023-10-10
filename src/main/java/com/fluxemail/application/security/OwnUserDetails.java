@@ -1,10 +1,7 @@
 package com.fluxemail.application.security;
 
-import com.fluxemail.application.security.data.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fluxemail.application.security.data.entities.User;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,7 +68,7 @@ public class OwnUserDetails extends User implements UserDetails  {
         userDetails.fullName = user.getFullName();
         userDetails.password = user.getPassword();
         userDetails.role = user.getRole();
-        userDetails.entity = user.getEntity();
+        userDetails.team = user.getTeam();
         userDetails.isActive = user.getIsActive();
         userDetails.createdAt=user.getCreatedAt();
         userDetails.updatedAt=user.getUpdatedAt();

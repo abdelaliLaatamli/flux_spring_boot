@@ -1,6 +1,7 @@
-package com.fluxemail.application.security.data;
+package com.fluxemail.application.security.data.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

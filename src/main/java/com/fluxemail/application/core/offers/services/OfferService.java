@@ -1,4 +1,4 @@
-package com.fluxemail.application.core.offers;
+package com.fluxemail.application.core.offers.services;
 
 public class OfferService {
 }

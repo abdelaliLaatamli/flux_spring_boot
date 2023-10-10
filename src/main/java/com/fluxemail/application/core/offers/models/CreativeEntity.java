@@ -1,4 +1,4 @@
-package com.fluxemail.application.core.offers;
+package com.fluxemail.application.core.offers.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 //@Table(name="_offers",schema="_networks_schema")
-@Table(name="_creatives")
+@Table(name="_creatives",schema = "_affiliate")
 public class CreativeEntity {
 
     @Id
