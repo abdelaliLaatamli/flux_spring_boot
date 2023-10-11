@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Table(name="_offers",schema="_networks_schema")
 @Table(name="_offers",schema = "_affiliate")
 public class OfferEntity {
 
@@ -22,20 +21,26 @@ public class OfferEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long sid;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column
     private String type;
 
+    @Column
     private Double amount;
 
+    @Column(nullable = false)
     private String offerUrl;
 
-    private String unsubUrl;
+    @Column
+    private String unsubscribeUrl;
 
 
     @OneToOne(fetch = FetchType.LAZY)

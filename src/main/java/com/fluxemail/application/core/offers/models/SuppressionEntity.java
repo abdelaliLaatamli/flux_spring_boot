@@ -13,7 +13,6 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Table(name="_offers",schema="_networks_schema")
 @Table(name="_suppression", schema = "_affiliate")
 public class SuppressionEntity {
 
@@ -21,16 +20,20 @@ public class SuppressionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String suppression_link;
 
-    private Boolean is_updated;
+    @Column(nullable = false)
+    private Boolean is_updated=false;
 
-    private Boolean enableEmpty;
+
+    @Column(nullable = false)
+    private Boolean enableEmpty=false;
 
     private Date last_updated;
 
     @Enumerated(EnumType.STRING)
-    private Priority priority;
+    private Priority priority=Priority.MEDUIM;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId

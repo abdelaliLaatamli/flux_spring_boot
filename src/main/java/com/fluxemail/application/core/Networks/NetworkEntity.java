@@ -21,12 +21,17 @@ public class NetworkEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String network_url;
 
+    @Column(nullable = false)
     private String network_api_url;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private NetworkType networkType;
 

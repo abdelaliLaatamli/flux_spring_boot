@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Table(name="_offers",schema="_networks_schema")
 @Table(name="_creatives",schema = "_affiliate")
 public class CreativeEntity {
 
@@ -19,16 +18,20 @@ public class CreativeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    @Column(nullable = false)
     private String cid;
 
+    @Column
     private String url;
 
-    private String offer_image;
+    @Column
+    private String offerImage;
 
-    private String unsub_image;
+    @Column
+    private String unsubscribeImage;
 
-    private boolean is_active = false;
+    @Column(nullable = false)
+    private boolean isActive = false;
 
     @ManyToOne
     @JoinColumn(name="offer_id", nullable=false)

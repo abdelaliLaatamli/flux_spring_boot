@@ -18,9 +18,13 @@ public class NetworkAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer account_Id;
+    @Column(nullable = true)
     private String account_username;
+    @Column(nullable = true)
     private String account_password;
+    @Column(nullable = true)
     private String account_apikey;
 
     @ManyToOne
