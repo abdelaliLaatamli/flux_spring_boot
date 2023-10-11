@@ -1,5 +1,6 @@
 package com.fluxemail.application.web.offers;
 
+import com.fluxemail.utils.ssh.jsch.JSchExampleSSHConnection;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,9 @@ public class OfferController {
 
     @GetMapping
     private ResponseEntity<String> getOffers(){
+//        JSchExampleSSHConnection.test_ssh();
+//        JSchExampleSSHConnection.test_ssh_key_string();
+        JSchExampleSSHConnection.test_ssk_key_file();
         return ResponseEntity.ok("list all offers");
     }
 

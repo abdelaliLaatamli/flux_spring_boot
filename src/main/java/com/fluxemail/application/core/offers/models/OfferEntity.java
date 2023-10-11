@@ -41,9 +41,8 @@ public class OfferEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private NetworkAccount networkAccount;
 
-//    @OneToOne(optional = true)
-//    @OneToOne(optional = true)
-//    private SuppressionEntity suppression;
+    //    @OneToOne(optional = true)
+    //    private SuppressionEntity suppression;
 
     @OneToMany(mappedBy="offer",fetch = FetchType.LAZY)
     private Set<CreativeEntity> creatives;
