@@ -14,7 +14,10 @@ public class OfferController {
     private ResponseEntity<String> getOffers(){
 //        JSchExampleSSHConnection.test_ssh();
 //        JSchExampleSSHConnection.test_ssh_key_string();
-        JSchExampleSSHConnection.test_ssk_key_file();
+//        JSchExampleSSHConnection.test_ssk_key_file();
+//        JSchExampleSSHConnection.ssh_out_class();
+//        JSchExampleSSHConnection.ssh_key_string_class();
+        JSchExampleSSHConnection.ssh_key_private_class();
         return ResponseEntity.ok("list all offers");
     }
 
