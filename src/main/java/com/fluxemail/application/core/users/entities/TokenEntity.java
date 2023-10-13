@@ -1,4 +1,4 @@
-package com.fluxemail.application.security.data.entities;
+package com.fluxemail.application.core.users.entities;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@Table(schema = "_users_schema")
-public class Token {
+@Table(name = "_tokens")
+public class TokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
 
 }

@@ -1,14 +1,13 @@
 package com.fluxemail.application.web.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fluxemail.application.core.offers.repositories.EntityRepository;
+import com.fluxemail.application.core.users.entities.*;
 import com.fluxemail.application.security.JwtService;
 import com.fluxemail.application.security.OwnUserDetails;
-import com.fluxemail.application.security.data.entities.Role;
-import com.fluxemail.application.security.data.entities.Token;
-import com.fluxemail.application.security.data.entities.TokenType;
-import com.fluxemail.application.security.data.entities.User;
-import com.fluxemail.application.security.data.repositories.TokenRepository;
-import com.fluxemail.application.security.data.repositories.UserRepository;
+import com.fluxemail.application.security.data.entities.*;
+import com.fluxemail.application.core.users.repositories.TokenRepository;
+import com.fluxemail.application.core.users.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,7 @@ import java.io.IOException;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final EntityRepository entityRepository;
     private final TokenRepository tokenRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -35,12 +35,15 @@ public class AuthenticationService {
         if (userRepository.findByEmail(request.getEmail()).isPresent())
             throw new RuntimeException("User already exist");
 
-        var user = User.builder()
+        EntityEntity entity = entityRepository.findByName("default").orElse(null);
+
+        var user = UserEntity.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password( passwordEncoder.encode( request.getPassword()))
                 .role(Role.USER)
                 .isActive(true)
+                .entity(entity)
                 .build();
 
         var createdUser = userRepository.save(user);
@@ -57,9 +60,9 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(String jwtToken, User createdUser) {
+    private void saveUserToken(String jwtToken, UserEntity createdUser) {
 
-        var accessToken= Token.builder()
+        var accessToken= TokenEntity.builder()
                 .token(jwtToken)
                 .tokenType(TokenType.ACCESS)
                 .expired(false)
@@ -140,7 +143,7 @@ public class AuthenticationService {
         }
     }
 
-    private void revokeAllUserTokens(User user){
+    private void revokeAllUserTokens(UserEntity user){
 
         var validTokens = tokenRepository.findAllValidTokensByUser(user.getId());
         if(validTokens.isEmpty())

@@ -1,8 +1,7 @@
-package com.fluxemail.application.web.seeds;
+package com.fluxemail.application.shared.seeds;
 
 import com.fluxemail.application.core.offers.repositories.EntityRepository;
-import com.fluxemail.application.security.data.entities.EntityEntity;
-import jakarta.persistence.Entity;
+import com.fluxemail.application.core.users.entities.EntityEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -28,9 +27,14 @@ public class Seeder {
     }
 
     private void seedEntityTable(){
-        var defaultEntity = EntityEntity.builder().name("default").build();
 
-        this.entityRepository.save(defaultEntity);
+        var isExist = this.entityRepository.findByName("default").isPresent();
+
+        if(!isExist){
+            var defaultEntity = EntityEntity.builder().name("default").build();
+            this.entityRepository.save(defaultEntity);
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 package com.fluxemail.application.security;
 
-import com.fluxemail.application.security.data.entities.User;
+import com.fluxemail.application.core.users.entities.UserEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-public class OwnUserDetails extends User implements UserDetails  {
+public class OwnUserDetails extends UserEntity implements UserDetails  {
     /**
      * @return
      */
@@ -59,7 +59,7 @@ public class OwnUserDetails extends User implements UserDetails  {
         return true;
     }
 
-    public static OwnUserDetails fromUser(User user){
+    public static OwnUserDetails fromUser(UserEntity user){
 
         OwnUserDetails userDetails = new OwnUserDetails();
 

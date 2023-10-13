@@ -1,6 +1,6 @@
 package com.fluxemail.application.security;
 
-import com.fluxemail.application.security.data.repositories.TokenRepository;
+import com.fluxemail.application.core.users.repositories.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

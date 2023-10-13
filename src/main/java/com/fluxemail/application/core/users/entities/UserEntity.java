@@ -1,4 +1,4 @@
-package com.fluxemail.application.security.data.entities;
+package com.fluxemail.application.core.users.entities;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
@@ -17,9 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Table( name = "_users" , schema = "_users_schema" )
 @Table(name = "_users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +33,6 @@ public class User {
     @Column
     protected String password;
 
-//    @Column
-//    protected int entity = 1 ;
 
     @Column
     protected int team = 1 ;
@@ -46,34 +43,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     protected Role role = Role.USER;
 
+
+
     @Column(updatable = false)
     @CreationTimestamp
     protected LocalDateTime createdAt;
+
     @UpdateTimestamp
     protected LocalDateTime updatedAt;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "created_at", nullable = false, updatable = false)
-//    protected Date createdAt;
-//
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "updated_at")
-//    protected Date updatedAt;
-//
-//    @PrePersist
-//    protected void onCreate() {
-//        createdAt = new Date();
-//        updatedAt = new Date();
-//    }
-//
-//    @PreUpdate
-//    protected void onUpdate() {
-//        updatedAt = new Date();
-//    }
-
 
     @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+    private List<TokenEntity> tokens;
 
 
     @ManyToOne

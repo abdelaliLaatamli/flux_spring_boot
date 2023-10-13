@@ -1,4 +1,4 @@
-package com.fluxemail.application.security.data.entities;
+package com.fluxemail.application.core.users.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +35,6 @@ public class EntityEntity {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "entity")
-    private List<User> users;
+    private List<UserEntity> users;
 
 }
