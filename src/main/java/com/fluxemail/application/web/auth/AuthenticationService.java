@@ -5,7 +5,6 @@ import com.fluxemail.application.core.offers.repositories.EntityRepository;
 import com.fluxemail.application.core.users.entities.*;
 import com.fluxemail.application.security.JwtService;
 import com.fluxemail.application.security.OwnUserDetails;
-import com.fluxemail.application.security.data.entities.*;
 import com.fluxemail.application.core.users.repositories.TokenRepository;
 import com.fluxemail.application.core.users.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
