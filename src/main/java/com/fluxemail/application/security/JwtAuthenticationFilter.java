@@ -46,8 +46,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request , response);
             return;
         }
+
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUserEmail(jwt);
+        try {
+            userEmail = jwtService.extractUserEmail(jwt);
+        }catch (RuntimeException e ){
+            throw new RuntimeException("error on parcing");
+        }
+
         if( userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             var isTokenValid = tokenRepository

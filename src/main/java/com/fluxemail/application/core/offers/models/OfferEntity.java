@@ -24,6 +24,13 @@ public class OfferEntity {
     @Column(nullable = false)
     private Long sid;
 
+    @Column
+    private Integer campaignId;
+
+    @Column(nullable = false , columnDefinition = "default 'ACTIVE'")
+    @Enumerated(EnumType.STRING )
+    private OfferStatus status = OfferStatus.ACTIVE;
+
     @Column(nullable = false)
     private String name;
 
@@ -33,7 +40,7 @@ public class OfferEntity {
     @Column
     private String type;
 
-    @Column
+    @Column(nullable = false,columnDefinition = "default 0")
     private Double amount;
 
     @Column(nullable = false)
@@ -42,12 +49,15 @@ public class OfferEntity {
     @Column
     private String unsubscribeUrl;
 
+    @Column
+    private String countries;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     private NetworkAccount networkAccount;
 
-    //    @OneToOne(optional = true)
-    //    private SuppressionEntity suppression;
+    @OneToOne
+    private SuppressionEntity suppression;
 
     @OneToMany(mappedBy="offer",fetch = FetchType.LAZY)
     private Set<CreativeEntity> creatives;
