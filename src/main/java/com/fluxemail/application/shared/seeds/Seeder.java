@@ -1,6 +1,6 @@
 package com.fluxemail.application.shared.seeds;
 
-import com.fluxemail.application.core.offers.repositories.EntityRepository;
+import com.fluxemail.application.core.users.repositories.EntityRepository;
 import com.fluxemail.application.core.users.entities.EntityEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;

@@ -1,9 +1,12 @@
 package com.fluxemail.application.web.offers;
 
+import com.fluxemail.application.core.offers.Dtos.OfferDto;
 import com.fluxemail.application.core.offers.models.OfferEntity;
 import com.fluxemail.application.web.offers.requests.OfferRequest;
 import com.fluxemail.application.core.offers.services.OfferService;
+import com.fluxemail.application.web.offers.responses.OfferResponse;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
+    private final ModelMapper modelMapper;
 
     @GetMapping
     private ResponseEntity<List<OfferEntity>> getOffers(){
@@ -25,15 +29,20 @@ public class OfferController {
     @GetMapping("/{offerId}")
     private ResponseEntity<OfferEntity> getOffer(@PathVariable(value = "offerId") Long offerId){
         OfferEntity offer = offerService.getOffer( offerId );
+
         return ResponseEntity.ok( offer );
     }
 
-    @PostMapping("")
-    private ResponseEntity<OfferEntity> addPost(@RequestBody OfferRequest offer){
+    @PostMapping("/")
+    private ResponseEntity<OfferResponse> addPost(@RequestBody OfferRequest offer){
 
-        System.out.println( offer );
+        OfferDto offerDto = modelMapper.map( offer , OfferDto.class );
 
-        return ResponseEntity.ok(null);
+        OfferDto createdOffer = offerService.createOffer(offerDto);
+
+        var offerResponse = this.modelMapper.map(createdOffer , OfferResponse.class );
+
+        return ResponseEntity.ok(offerResponse);
     }
 
     @PutMapping("/{offerId}")

@@ -1,7 +1,7 @@
 package com.fluxemail.application.web.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fluxemail.application.core.offers.repositories.EntityRepository;
+import com.fluxemail.application.core.users.repositories.EntityRepository;
 import com.fluxemail.application.core.users.entities.*;
 import com.fluxemail.application.security.JwtService;
 import com.fluxemail.application.security.OwnUserDetails;

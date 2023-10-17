@@ -1,4 +1,4 @@
-package com.fluxemail.application.core.Networks;
+package com.fluxemail.application.core.Networks.models;
 
 
 import jakarta.persistence.*;
@@ -14,7 +14,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_networks", schema = "_affiliate")
+@Table(
+        name = "_networks",
+        schema = "_affiliate" ,
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UniqueNameAndType" ,
+                        columnNames = {"name","isActive","networkType"}
+                )
+        }
+)
 public class NetworkEntity {
 
     @Id
@@ -26,14 +35,16 @@ public class NetworkEntity {
     private String name;
 
     @Column(nullable = false)
-    private String network_url;
+    private String networkUrl;
 
     @Column(nullable = false)
-    private String network_api_url;
+    private String networkApiUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private NetworkType networkType;
+
+    private Boolean isActive=true;
 
     @OneToMany(mappedBy="network")
     private Set<NetworkAccount> networkAccounts;

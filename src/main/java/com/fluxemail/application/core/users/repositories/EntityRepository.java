@@ -1,4 +1,4 @@
-package com.fluxemail.application.core.offers.repositories;
+package com.fluxemail.application.core.users.repositories;
 
 import com.fluxemail.application.core.users.entities.EntityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

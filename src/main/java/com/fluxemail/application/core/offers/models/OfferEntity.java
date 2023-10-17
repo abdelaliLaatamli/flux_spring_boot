@@ -1,6 +1,6 @@
 package com.fluxemail.application.core.offers.models;
 
-import com.fluxemail.application.core.Networks.NetworkAccount;
+import com.fluxemail.application.core.Networks.models.NetworkAccount;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,6 +63,6 @@ public class OfferEntity {
     private Set<CreativeEntity> creatives;
 
     @OneToMany(mappedBy="offer",fetch = FetchType.LAZY)
-    private Set<ResourcesEntity> resources;
+    private Set<ResourceEntity> resources;
 
 }
