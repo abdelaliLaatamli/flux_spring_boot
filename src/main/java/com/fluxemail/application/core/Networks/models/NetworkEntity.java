@@ -47,6 +47,6 @@ public class NetworkEntity {
     private Boolean isActive=true;
 
     @OneToMany(mappedBy="network")
-    private Set<NetworkAccount> networkAccounts;
+    private Set<NetworkAccountEntity> networkAccounts;
 
 }

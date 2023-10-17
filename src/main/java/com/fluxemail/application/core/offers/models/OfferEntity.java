@@ -1,6 +1,6 @@
 package com.fluxemail.application.core.offers.models;
 
-import com.fluxemail.application.core.Networks.models.NetworkAccount;
+import com.fluxemail.application.core.Networks.models.NetworkAccountEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,7 +54,7 @@ public class OfferEntity {
 
 
     @OneToOne(fetch = FetchType.LAZY)
-    private NetworkAccount networkAccount;
+    private NetworkAccountEntity networkAccount;
 
     @OneToOne
     private SuppressionEntity suppression;

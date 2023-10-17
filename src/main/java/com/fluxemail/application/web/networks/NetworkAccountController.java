@@ -1,26 +1,45 @@
 package com.fluxemail.application.web.networks;
 
+import com.fluxemail.application.core.Networks.dtos.NetworkAccountDto;
+import com.fluxemail.application.core.Networks.services.NetworkAccountService;
 import com.fluxemail.application.web.networks.requests.NetworkAccountRequest;
+import com.fluxemail.application.web.networks.responses.NetworkAccountResponse;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/network-accounts")
 @AllArgsConstructor
 public class NetworkAccountController {
 
-    @GetMapping("/")
-    private ResponseEntity<Object> allNetworkAccounts(){
+    private final NetworkAccountService networkAccountService;
+    private final ModelMapper modelMapper;
 
-        return ResponseEntity.ok(null);
+    @GetMapping("")
+    private ResponseEntity<List<NetworkAccountResponse>> allNetworkAccounts(){
+
+        var listAllNetworkAccount = this.networkAccountService.listAllNetworkAccount();
+        var listNetowrkAccountReponse = listAllNetworkAccount
+                .stream()
+                .map( networkAccountDto -> modelMapper.map(networkAccountDto , NetworkAccountResponse.class) )
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(listNetowrkAccountReponse);
     }
 
     @GetMapping("/{account-id}")
-    private ResponseEntity<Object> networkAccount( @PathVariable("account-id") Long accountId ){
+    private ResponseEntity<NetworkAccountResponse> networkAccount( @PathVariable("account-id") Long accountId ){
+        System.out.println( accountId );
+        var networkAccount = networkAccountService.networkAccount( accountId );
+        var networkAccountResponse = modelMapper.map( networkAccount , NetworkAccountResponse.class );
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(networkAccountResponse );
     }
 
 

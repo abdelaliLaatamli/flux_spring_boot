@@ -12,20 +12,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "_networkaccounts" , schema = "_affiliate")
-public class NetworkAccount {
+public class NetworkAccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Integer account_Id;
+    private Integer accountId;
     @Column(nullable = true)
-    private String account_username;
+    private String accountUsername;
     @Column(nullable = true)
-    private String account_password;
+    private String accountPassword;
     @Column(nullable = true)
-    private String account_apikey;
+    private String accountApiKey;
+
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name="network_id", nullable=false)
