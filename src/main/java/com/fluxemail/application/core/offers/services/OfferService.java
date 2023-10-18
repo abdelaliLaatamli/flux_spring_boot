@@ -8,6 +8,7 @@ import com.fluxemail.application.core.Networks.repositories.NetworkAccountReposi
 import com.fluxemail.application.core.offers.repositories.OfferRepository;
 import com.fluxemail.application.core.offers.repositories.ResourceRepository;
 import com.fluxemail.application.core.offers.repositories.SuppressionRepository;
+import com.fluxemail.application.shared.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,25 +28,40 @@ public class OfferService {
 
     private final ModelMapper modelMapper;
 
-    public List<OfferEntity> getOffers(){
-        return offerRepository.findAll();
+    public List<OfferDto> getOffers(){
+
+        var offers = offerRepository.findAll();
+        var offerDtos = offers
+                .stream()
+                .map( offerEntity -> modelMapper.map( offerEntity , OfferDto.class ) )
+                .collect(Collectors.toList());
+
+
+        return offerDtos;
     }
 
-    public OfferEntity getOffer(Long offerId) {
-        return offerRepository.findById(offerId).orElseThrow(
-                () -> new RuntimeException("Offer id " + offerId +" not found")
-        );
+    public OfferDto getOffer(Long offerId) {
+
+        var offerEntity = offerRepository
+                .findById(offerId)
+                .orElseThrow(
+                    () -> new ResourceNotFoundException("Offer id " + offerId +" not found")
+                );
+
+        var offerDto = modelMapper.map( offerEntity , OfferDto.class );
+
+        return offerDto;
     }
 
     @Transactional
-    public OfferDto createOffer(OfferDto offer) {
+    public OfferDto createOffer(Long networkAccountId, OfferDto offer) {
         // convert from dto to entity
         var offerEntity = this.modelMapper.map( offer , OfferEntity.class);
 
         // find network by id
         var networkAccount = networkAccountRepository
-                .findById( offer.getNetworkAccountId() )
-                .orElseThrow( () -> new RuntimeException("Network account not found !!") );
+                .findById( networkAccountId )
+                .orElseThrow( () -> new ResourceNotFoundException("Network account id "+ networkAccountId +" not found !!") );
 
         offerEntity.setNetworkAccount(networkAccount);
 

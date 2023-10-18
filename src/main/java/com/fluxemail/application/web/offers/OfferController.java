@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/offers")
@@ -21,24 +22,32 @@ public class OfferController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    private ResponseEntity<List<OfferEntity>> getOffers(){
-        List<OfferEntity> offers = offerService.getOffers();
-        return ResponseEntity.ok( offers );
+    private ResponseEntity<List<?>> getOffers(){
+        List<OfferDto> offers = offerService.getOffers();
+
+        var offerResponses = offers
+                .stream()
+                .map( offerDto -> modelMapper.map(offerDto , OfferResponse.class) )
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok( offerResponses );
     }
 
     @GetMapping("/{offerId}")
-    private ResponseEntity<OfferEntity> getOffer(@PathVariable(value = "offerId") Long offerId){
-        OfferEntity offer = offerService.getOffer( offerId );
+    private ResponseEntity<OfferResponse> getOffer(@PathVariable(value = "offerId") Long offerId){
+        var offer = offerService.getOffer( offerId );
 
-        return ResponseEntity.ok( offer );
+        var offerResponse = modelMapper.map( offer , OfferResponse.class );
+
+        return ResponseEntity.ok( offerResponse );
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     private ResponseEntity<OfferResponse> addPost(@RequestBody OfferRequest offer){
 
         OfferDto offerDto = modelMapper.map( offer , OfferDto.class );
 
-        OfferDto createdOffer = offerService.createOffer(offerDto);
+        OfferDto createdOffer = offerService.createOffer( offer.getNetworkAccountId() , offerDto);
 
         var offerResponse = this.modelMapper.map(createdOffer , OfferResponse.class );
 

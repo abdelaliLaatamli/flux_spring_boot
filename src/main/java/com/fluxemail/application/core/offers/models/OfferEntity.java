@@ -2,14 +2,12 @@ package com.fluxemail.application.core.offers.models;
 
 import com.fluxemail.application.core.Networks.models.NetworkAccountEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,10 +24,6 @@ public class OfferEntity {
 
     @Column
     private Integer campaignId;
-
-    @Column(nullable = false , columnDefinition = "varchar(20) default 'ACTIVE'")
-    @Enumerated(EnumType.STRING )
-    private OfferStatus status = OfferStatus.ACTIVE;
 
     @Column(nullable = false)
     private String name;
@@ -53,16 +47,20 @@ public class OfferEntity {
     private String countries;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false , columnDefinition = "varchar(20) default 'ACTIVE'")
+    @Enumerated(EnumType.STRING )
+    private OfferStatus status = OfferStatus.ACTIVE;
+
+    @OneToOne
     private NetworkAccountEntity networkAccount;
 
     @OneToOne
     private SuppressionEntity suppression;
 
-    @OneToMany(mappedBy="offer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="offer", fetch = FetchType.LAZY)
     private Set<CreativeEntity> creatives;
 
-    @OneToMany(mappedBy="offer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="offer" , fetch = FetchType.LAZY)
     private Set<ResourceEntity> resources;
 
 }

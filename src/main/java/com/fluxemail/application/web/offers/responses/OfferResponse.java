@@ -1,5 +1,6 @@
 package com.fluxemail.application.web.offers.responses;
 
+import com.fluxemail.application.web.networks.responses.NetworkAccountResponse;
 import com.fluxemail.application.web.offers.requests.CreativeRequest;
 import com.fluxemail.application.web.offers.requests.ResourceRequest;
 import com.fluxemail.application.web.offers.requests.SuppressionRequest;
@@ -23,8 +24,9 @@ public class OfferResponse {
     private String offerUrl;
     private String unsubscribeUrl;
     private String countries;
-    private Long networkAccountId;
+//    private NetworkAccountResponse networkAccount;
+    private SuppressionResponse suppression;
     private Set<ResourceResponse> resources;
     private Set<CreativeResponse> creatives;
-    private SuppressionResponse suppression;
+
 }

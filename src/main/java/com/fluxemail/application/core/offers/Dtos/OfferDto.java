@@ -1,5 +1,8 @@
 package com.fluxemail.application.core.offers.Dtos;
 
+import com.fluxemail.application.core.Networks.dtos.NetworkAccountDto;
+import com.fluxemail.application.core.Networks.models.NetworkAccountEntity;
+import com.fluxemail.application.core.offers.models.OfferStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OfferDto {
+
     private Long id;
     private Long sid;
     private Integer campaignId;
@@ -20,9 +24,11 @@ public class OfferDto {
     private String offerUrl;
     private String unsubscribeUrl;
     private String countries;
-    private Long networkAccountId;
-    private Set<ResourceDto> resources;
-    private Set<CreativeDto> creatives;
+    private OfferStatus status = OfferStatus.ACTIVE;
+    private NetworkAccountDto networkAccount;
     private SuppressionDto suppression;
+    private Set<CreativeDto> creatives;
+    private Set<ResourceDto> resources;
+
 }
 
