@@ -1,10 +1,10 @@
 package com.fluxemail.application.web.offers;
 
 import com.fluxemail.application.core.offers.Dtos.OfferDto;
-import com.fluxemail.application.core.offers.models.OfferEntity;
 import com.fluxemail.application.web.offers.requests.OfferRequest;
 import com.fluxemail.application.core.offers.services.OfferService;
 import com.fluxemail.application.web.offers.responses.OfferResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class OfferController {
     }
 
     @PostMapping("")
-    private ResponseEntity<OfferResponse> addPost(@RequestBody OfferRequest offer){
+    private ResponseEntity<OfferResponse> addOffer( @Valid  @RequestBody OfferRequest offer){
 
         OfferDto offerDto = modelMapper.map( offer , OfferDto.class );
 

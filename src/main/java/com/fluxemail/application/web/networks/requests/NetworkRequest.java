@@ -2,7 +2,6 @@ package com.fluxemail.application.web.networks.requests;
 
 import com.fluxemail.application.core.Networks.models.NetworkType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
