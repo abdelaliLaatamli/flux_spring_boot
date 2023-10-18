@@ -55,8 +55,21 @@ public class OfferController {
     }
 
     @PutMapping("/{offerId}")
-    private ResponseEntity<String> putOffer(@PathVariable(value = "offerId") Long offerId){
-        return ResponseEntity.ok(" Put Offer details " + offerId);
+    private ResponseEntity<OfferResponse> putOffer(
+            @PathVariable(value = "offerId") Long offerId ,
+            @RequestBody OfferRequest offerRequest
+    ){
+        var offerDto = modelMapper.map( offerRequest , OfferDto.class );
+//        System.out.println( offerDto );
+
+        var updatedOfferDto = offerService.updateOffer( offerId , offerRequest.getNetworkAccountId() , offerDto );
+
+        var updatedOfferResponse = modelMapper.map( updatedOfferDto ,  OfferResponse.class );
+
+
+        return ResponseEntity
+                .accepted()
+                .body(updatedOfferResponse);
     }
 
     @DeleteMapping("/{offerId}")

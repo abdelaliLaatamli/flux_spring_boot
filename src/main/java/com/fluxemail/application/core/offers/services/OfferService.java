@@ -10,6 +10,8 @@ import com.fluxemail.application.core.offers.repositories.ResourceRepository;
 import com.fluxemail.application.core.offers.repositories.SuppressionRepository;
 import com.fluxemail.application.shared.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -87,5 +89,39 @@ public class OfferService {
         var createdOfferDto = this.modelMapper.map( createdOffer , OfferDto.class );
 
         return createdOfferDto;
+    }
+
+    public OfferDto updateOffer(
+            Long offerId ,
+            Long networkAccountId,
+            OfferDto offerDto
+    ) {
+
+        var offerFound = offerRepository
+                .findById(offerId)
+                .orElseThrow( () -> new ResourceNotFoundException(" Offer id " + offerId + " not Found !!") );
+
+        offerFound.setSid(offerDto.getSid());
+        offerFound.setCampaignId(offerDto.getCampaignId());
+        offerFound.setName(offerDto.getName());
+        offerFound.setDescription(offerDto.getDescription());
+        offerFound.setType(offerDto.getType());
+        offerFound.setAmount(offerDto.getAmount());
+        offerFound.setOfferUrl(offerDto.getOfferUrl());
+        offerFound.setUnsubscribeUrl(offerDto.getUnsubscribeUrl());
+        offerFound.setCountries(offerDto.getCountries());
+
+        if( networkAccountId != null ){
+            var networkAccount = networkAccountRepository
+                    .findActivatedById(networkAccountId)
+                    .orElseThrow( () -> new ResourceNotFoundException("Network Account id " +networkAccountId+ " Not found !!"));
+            offerFound.setNetworkAccount(networkAccount);
+        }
+
+        var updatedOfferEntity = offerRepository.save(offerFound);
+
+        var updatedOfferDto = modelMapper.map( updatedOfferEntity , OfferDto.class );
+
+        return updatedOfferDto ;
     }
 }
