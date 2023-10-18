@@ -69,6 +69,7 @@ public class NetworkAccountController {
     @DeleteMapping("/{account-id}")
     private ResponseEntity<Object> deleteNetworkAccount( @PathVariable("account-id") Long accountId ){
         networkAccountService.deleteNetworkAccount(accountId);
+        // TODO: Deactivate all offer
         return ResponseEntity.noContent().build() ;
     }
 

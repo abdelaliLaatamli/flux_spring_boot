@@ -2,6 +2,7 @@ package com.fluxemail.application.core.offers.services;
 
 import com.fluxemail.application.core.offers.Dtos.OfferDto;
 import com.fluxemail.application.core.offers.models.OfferEntity;
+import com.fluxemail.application.core.offers.models.OfferStatus;
 import com.fluxemail.application.core.offers.models.ResourceEntity;
 import com.fluxemail.application.core.offers.models.SuppressionEntity;
 import com.fluxemail.application.core.Networks.repositories.NetworkAccountRepository;
@@ -32,7 +33,7 @@ public class OfferService {
 
     public List<OfferDto> getOffers(){
 
-        var offers = offerRepository.findAll();
+        var offers = offerRepository.findAllActivated();
         var offerDtos = offers
                 .stream()
                 .map( offerEntity -> modelMapper.map( offerEntity , OfferDto.class ) )
@@ -45,7 +46,7 @@ public class OfferService {
     public OfferDto getOffer(Long offerId) {
 
         var offerEntity = offerRepository
-                .findById(offerId)
+                .findActivatedById(offerId)
                 .orElseThrow(
                     () -> new ResourceNotFoundException("Offer id " + offerId +" not found")
                 );
@@ -62,7 +63,7 @@ public class OfferService {
 
         // find network by id
         var networkAccount = networkAccountRepository
-                .findById( networkAccountId )
+                .findActivatedById( networkAccountId )
                 .orElseThrow( () -> new ResourceNotFoundException("Network account id "+ networkAccountId +" not found !!") );
 
         offerEntity.setNetworkAccount(networkAccount);
@@ -98,7 +99,7 @@ public class OfferService {
     ) {
 
         var offerFound = offerRepository
-                .findById(offerId)
+                .findActivatedById(offerId)
                 .orElseThrow( () -> new ResourceNotFoundException(" Offer id " + offerId + " not Found !!") );
 
         offerFound.setSid(offerDto.getSid());
@@ -123,5 +124,17 @@ public class OfferService {
         var updatedOfferDto = modelMapper.map( updatedOfferEntity , OfferDto.class );
 
         return updatedOfferDto ;
+    }
+
+    public void deactiveteOffer(Long offerId) {
+
+        var offerFound = offerRepository
+                .findActivatedById(offerId)
+                .orElseThrow( () -> new ResourceNotFoundException(" Offer id " + offerId + " not Found !!") );
+
+        offerFound.setStatus(OfferStatus.INACTIVE);
+
+        offerRepository.save(offerFound);
+
     }
 }

@@ -60,7 +60,6 @@ public class OfferController {
             @RequestBody OfferRequest offerRequest
     ){
         var offerDto = modelMapper.map( offerRequest , OfferDto.class );
-//        System.out.println( offerDto );
 
         var updatedOfferDto = offerService.updateOffer( offerId , offerRequest.getNetworkAccountId() , offerDto );
 
@@ -74,6 +73,7 @@ public class OfferController {
 
     @DeleteMapping("/{offerId}")
     private ResponseEntity<Void> deleteOffer(@PathVariable(value = "offerId") Long offerId){
+        offerService.deactiveteOffer( offerId );
         return ResponseEntity.noContent().build();
     }
 
