@@ -35,7 +35,7 @@ public class NetworkAccountController {
 
     @GetMapping("/{account-id}")
     private ResponseEntity<NetworkAccountResponse> networkAccount( @PathVariable("account-id") Long accountId ){
-        System.out.println( accountId );
+
         var networkAccount = networkAccountService.networkAccount( accountId );
         var networkAccountResponse = modelMapper.map( networkAccount , NetworkAccountResponse.class );
 
@@ -44,11 +44,14 @@ public class NetworkAccountController {
 
 
     @PostMapping
-    private ResponseEntity<Object> createNetworkAccount(
+    private ResponseEntity<NetworkAccountResponse> createNetworkAccount(
             @RequestBody NetworkAccountRequest networkAccountRequest
     ){
-
-        return new ResponseEntity<>(null , HttpStatus.CREATED);
+        var networkAccountDto = modelMapper.map( networkAccountRequest , NetworkAccountDto.class );
+        networkAccountDto.setId(null);
+        var createdNetworkAccountDto = networkAccountService.createNetworkAccount( networkAccountRequest.getNetworkId() , networkAccountDto );
+        var createdNetworkAccountResponse = modelMapper.map( createdNetworkAccountDto , NetworkAccountResponse.class );
+        return new ResponseEntity<>(createdNetworkAccountResponse , HttpStatus.CREATED);
     }
 
     @PutMapping("/{account-id}")

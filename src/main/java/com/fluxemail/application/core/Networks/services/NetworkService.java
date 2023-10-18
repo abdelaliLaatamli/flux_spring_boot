@@ -3,6 +3,7 @@ package com.fluxemail.application.core.Networks.services;
 import com.fluxemail.application.core.Networks.dtos.NetworkDto;
 import com.fluxemail.application.core.Networks.models.NetworkEntity;
 import com.fluxemail.application.core.Networks.repositories.NetworkRepository;
+import com.fluxemail.application.shared.exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,7 +37,7 @@ public class NetworkService {
 
         var network = networkRepository
                 .findActiveById(networkId)
-                .orElseThrow( () -> new RuntimeException("Network id " + networkId + " Not found" ) );
+                .orElseThrow( () -> new ResourceNotFoundException("Network id " + networkId + " Not found" ) );
 
         var networkDto = modelMapper.map( network , NetworkDto.class );
 
@@ -59,7 +60,7 @@ public class NetworkService {
 
         var network = networkRepository
                 .findActiveById(networkId)
-                .orElseThrow(() -> new RuntimeException("Network id " + networkId + " Not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("Network id " + networkId + " Not found" ));
 
         network.setName( networkDto.getName() );
         network.setNetworkUrl(networkDto.getNetworkUrl());
@@ -77,7 +78,7 @@ public class NetworkService {
 
         var network = networkRepository
                 .findActiveById(networkId)
-                .orElseThrow(() -> new RuntimeException("Network id " + networkId + " Not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("Network id " + networkId + " Not found" ));
 
         network.setIsActive(false);
         networkRepository.save(network);

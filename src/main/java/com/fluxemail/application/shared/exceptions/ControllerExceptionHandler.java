@@ -37,5 +37,19 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorMessage> notfound(ResourceNotFoundException ex , WebRequest request ){
+
+        ErrorMessage error = new ErrorMessage(
+                HttpStatus.NOT_FOUND.value(),
+                new Date(),
+                ex.getMessage() ,
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+
+    }
+
 
 }

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 public class NetworkAccountResponse {
 
     private Long id;
-    private Integer account_Id;
-    private String account_username;
-    private String account_password;
-    private String account_apikey;
+    private Integer accountAffiliateId;
+    private String accountUsername;
+    private String accountPassword;
+    private String accountApiKey;
     private NetworkDto network;
 }

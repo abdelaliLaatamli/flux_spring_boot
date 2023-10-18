@@ -27,7 +27,7 @@ public class OfferEntity {
     @Column
     private Integer campaignId;
 
-    @Column(nullable = false , columnDefinition = "default 'ACTIVE'")
+    @Column(nullable = false , columnDefinition = "varchar(20) default 'ACTIVE'")
     @Enumerated(EnumType.STRING )
     private OfferStatus status = OfferStatus.ACTIVE;
 
@@ -40,7 +40,7 @@ public class OfferEntity {
     @Column
     private String type;
 
-    @Column(nullable = false,columnDefinition = "default 0")
+    @Column(nullable = false,columnDefinition = "double precision default 0")
     private Double amount;
 
     @Column(nullable = false)

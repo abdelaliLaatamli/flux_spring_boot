@@ -19,12 +19,12 @@ public class NetworkAccountEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Integer accountId;
+    private Integer accountAffiliateId;
     @Column(nullable = true)
     private String accountUsername;
     @Column(nullable = true)
     private String accountPassword;
-    @Column(nullable = true)
+    @Column(nullable = true , columnDefinition = "TEXT")
     private String accountApiKey;
 
     private Boolean isActive = true;

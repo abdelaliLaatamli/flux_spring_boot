@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NetworkAccountRequest {
-    private Long id;
-    private Integer account_Id;
-    private String account_username;
-    private String account_password;
-    private String account_apikey;
-    private NetworkResponse network;
+    private Integer accountAffiliateId;
+    private String accountUsername;
+    private String accountPassword;
+    private String accountApiKey;
+    private Long networkId;
 }
