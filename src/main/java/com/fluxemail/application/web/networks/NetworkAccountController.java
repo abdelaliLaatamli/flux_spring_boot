@@ -55,19 +55,21 @@ public class NetworkAccountController {
     }
 
     @PutMapping("/{account-id}")
-    private ResponseEntity<Object> updateNetworkAccount(
+    private ResponseEntity<NetworkAccountResponse> updateNetworkAccount(
             @PathVariable("account-id") Long accountId ,
             @RequestBody NetworkAccountRequest networkAccountRequest
             ){
-
-        return new ResponseEntity<>(null , HttpStatus.ACCEPTED);
+        var networkAccountDto = modelMapper.map( networkAccountRequest , NetworkAccountDto.class );
+        var updatedNetworkAccountDto = networkAccountService.updateNetworkAccount( accountId , networkAccountDto );
+        var updatedNetworkAccountResponse = modelMapper.map( updatedNetworkAccountDto , NetworkAccountResponse.class );
+        return new ResponseEntity<>(updatedNetworkAccountResponse , HttpStatus.ACCEPTED);
     }
 
 
     @DeleteMapping("/{account-id}")
     private ResponseEntity<Object> deleteNetworkAccount( @PathVariable("account-id") Long accountId ){
-
-        return new ResponseEntity<>(null , HttpStatus.NO_CONTENT);
+        networkAccountService.deleteNetworkAccount(accountId);
+        return ResponseEntity.noContent().build() ;
     }
 
 }

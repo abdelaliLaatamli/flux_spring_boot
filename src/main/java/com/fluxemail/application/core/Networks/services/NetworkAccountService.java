@@ -22,7 +22,7 @@ public class NetworkAccountService {
 
     public List<NetworkAccountDto> listAllNetworkAccount(){
 
-        var listAllNetworkAccount = this.networkAccountRepository.findAll();
+        var listAllNetworkAccount = this.networkAccountRepository.findAllActivated();
         var listAllNetworkAccountDtos = listAllNetworkAccount
                 .stream()
                 .map( networkAccount -> modelMapper.map(networkAccount , NetworkAccountDto.class) )
@@ -76,11 +76,35 @@ public class NetworkAccountService {
         return createdNetworkAccountDto;
     }
 
-    public NetworkAccountDto updateNetworkAccount( NetworkAccountDto networkAccountDto){
-        return null;
+    public NetworkAccountDto updateNetworkAccount(
+            Long networkAccountId ,
+            NetworkAccountDto networkAccountDto
+    ){
+        var networkAccountEntity = networkAccountRepository
+                .findActivatedById(networkAccountId)
+                .orElseThrow( () -> new ResourceNotFoundException("Network Account id " +networkAccountId  + " not found ") );
+
+        networkAccountEntity.setAccountAffiliateId( networkAccountDto.getAccountAffiliateId() );
+        networkAccountEntity.setAccountUsername( networkAccountDto.getAccountUsername() );
+        networkAccountEntity.setAccountPassword( networkAccountDto.getAccountPassword() );
+        networkAccountEntity.setAccountApiKey( networkAccountDto.getAccountApiKey() );
+
+        var updatedNetworkAccountEntity = networkAccountRepository.save( networkAccountEntity );
+        var updatedNetworkAccountDto = modelMapper.map( updatedNetworkAccountEntity , NetworkAccountDto.class );
+
+        return updatedNetworkAccountDto;
     }
 
-    public void deleteNetworkAccount( Long networkAccountId ){
+    public void deleteNetworkAccount(Long accountId) {
+
+        var networkAccount = networkAccountRepository
+                .findActivatedById(accountId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Network Account Id "+ accountId + " Not found !!")
+                );
+
+        networkAccount.setIsActive(false);
+        networkAccountRepository.save( networkAccount );
 
     }
 }

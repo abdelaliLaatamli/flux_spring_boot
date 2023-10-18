@@ -16,6 +16,8 @@ public interface NetworkAccountRepository extends JpaRepository<NetworkAccountEn
     @Query("SELECT n FROM NetworkAccountEntity n WHERE n.isActive = true and n.network.id= :networkId")
     List<NetworkAccountEntity> findAllByNetworkId(@Param("networkId") Long networkId);
 
+    @Query("SELECT n FROM NetworkAccountEntity n WHERE n.isActive = true")
+    List<NetworkAccountEntity> findAllActivated();
 
     @Query("SELECT n FROM NetworkAccountEntity n WHERE n.isActive = true and n.id= :networkAccountId")
     Optional<NetworkAccountEntity> findActivatedById( @Param("networkAccountId") Long networkAccountId );
