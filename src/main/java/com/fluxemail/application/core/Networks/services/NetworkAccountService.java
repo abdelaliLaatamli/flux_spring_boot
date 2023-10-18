@@ -34,6 +34,10 @@ public class NetworkAccountService {
 
     public List<NetworkAccountDto> listAllNetworkAccountByNetwork(Long networkId){
 
+        networkRepository
+                .findActiveById( networkId )
+                .orElseThrow( () -> new ResourceNotFoundException("Network id " + networkId + " not found !!" ) );
+
         var listNetworkAccountsByNetwork = networkAccountRepository.findAllByNetworkId(networkId);
 
         var listNetworkAccountsByNetworkDto = listNetworkAccountsByNetwork
