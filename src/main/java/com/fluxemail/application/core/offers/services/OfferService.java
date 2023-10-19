@@ -73,7 +73,7 @@ public class OfferService {
         var resources = offer.getResources()
                 .stream()
                 .map( resourceDto -> this.modelMapper.map( resourceDto , ResourceEntity.class) )
-                .map( resourceEntity -> { resourceEntity.setOffer(createdOffer); return resourceEntity; })
+                .peek(resourceEntity -> resourceEntity.setOffer(createdOffer))
                 .collect(Collectors.toSet());
         // save resources
         resourceRepository.saveAll(resources);

@@ -1,6 +1,7 @@
 package com.fluxemail.application.core.offers.models;
 
 import com.fluxemail.application.core.Networks.models.NetworkAccountEntity;
+import com.fluxemail.application.core.Networks.models.NetworkEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,8 +52,11 @@ public class OfferEntity {
     @Enumerated(EnumType.STRING )
     private OfferStatus status = OfferStatus.ACTIVE;
 
-    @OneToOne
+
+    @ManyToOne
+    @JoinColumn(name="network_account_id", nullable=false)
     private NetworkAccountEntity networkAccount;
+
 
     @OneToOne
     private SuppressionEntity suppression;
@@ -62,5 +66,7 @@ public class OfferEntity {
 
     @OneToMany(mappedBy="offer" , fetch = FetchType.LAZY)
     private Set<ResourceEntity> resources;
+
+
 
 }
