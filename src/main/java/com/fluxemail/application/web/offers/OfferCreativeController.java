@@ -6,6 +6,7 @@ import com.fluxemail.application.web.offers.requests.CreativeRequest;
 import com.fluxemail.application.web.offers.responses.CreativeResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,12 +69,23 @@ public class OfferCreativeController {
     }
 
 
-    @PutMapping("/{creativeId}")
+//    @PutMapping(value = "/{creativeId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PutMapping(value = "/{creativeId}" )
     public ResponseEntity<String> updateCreative(
             @PathVariable long offerId ,
-            @PathVariable long creativeId,
-            @RequestBody CreativeRequest creativeRequest
+            @PathVariable long creativeId
+//            @RequestPart("offerImage") MultipartFile offerImage
     ){
+//        var creative = CreativeRequest
+//                .builder()
+//                .offerImage(offerImage)
+//                .unsubscribeImage(unsubscribeImage)
+//                .cid(cid)
+//                .url(url)
+//                .build();
+
+//        System.out.println( creative );
+
         return ResponseEntity.accepted().body(" offerId " + offerId + " creative id " + creativeId );
     }
 
@@ -82,7 +94,10 @@ public class OfferCreativeController {
             @PathVariable long offerId ,
             @PathVariable long creativeId
     ){
-        return ResponseEntity.accepted().body(" offerId " + offerId + " creative id " + creativeId );
+
+        creativeOfferService.deactiveCreative( offerId , creativeId );
+
+        return ResponseEntity.noContent().build();
     }
 
 }

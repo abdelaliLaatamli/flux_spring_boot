@@ -76,4 +76,21 @@ public class CreativeOfferService {
         return creativeFoundDto;
 
     }
+
+    public void deactiveCreative(long offerId, long creativeId) {
+
+        offerRepository
+                .findActivatedById(offerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Offer Id " + offerId + " not found "));
+
+        var creativeFound = creativeRepository
+                .findActivatedById(creativeId)
+                .orElseThrow( () -> new ResourceNotFoundException("Creative Id " + creativeId + " Not found") );
+
+        if( creativeFound.getOffer().getId() != offerId )
+            throw new RuntimeException("Creative id "+ creativeId +" not belongs to offer id "+ offerId );
+
+        creativeFound.setActive(false);
+        creativeRepository.save(creativeFound);
+    }
 }
