@@ -35,7 +35,7 @@ public class CreativeOfferService {
             CreativeRequest creative
     ) {
         var offerImagePath = fileService.saveFile( offerId , "offer" , creative.getOfferImage() );
-        var offerUnsubPath = fileService.saveFile( offerId , "offer" , creative.getUnsubscribeImage() );
+        var offerUnsubPath = fileService.saveFile( offerId , "unsub" , creative.getUnsubscribeImage() );
 
         var offer = offerRepository
                 .findActivatedById( offerId )
@@ -46,12 +46,34 @@ public class CreativeOfferService {
                 .offer(offer)
                 .offerImage(offerImagePath)
                 .unsubscribeImage(offerUnsubPath)
+                .cid(creative.getCid())
+                .url(creative.getUrl())
                 .isActive(true)
                 .build();
+
 
         var createdCreativeEntity = creativeRepository.save( creativeEntity );
 
         var createdCreativeDto = modelMapper.map( createdCreativeEntity , CreativeDto.class );
         return createdCreativeDto;
+    }
+
+    public CreativeDto getCreative(long offerId, long creativeId) {
+
+        offerRepository
+                .findActivatedById(offerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Offer Id " + offerId + " not found "));
+
+        var creativeFound = creativeRepository
+                .findActivatedById(creativeId)
+                .orElseThrow( () -> new ResourceNotFoundException("Creative Id " + creativeId + " Not found") );
+
+        if( creativeFound.getOffer().getId() != offerId )
+            throw new RuntimeException("Creative id "+ creativeId +" not belongs to offer id "+ offerId );
+
+        var creativeFoundDto = modelMapper.map( creativeFound , CreativeDto.class );
+
+        return creativeFoundDto;
+
     }
 }

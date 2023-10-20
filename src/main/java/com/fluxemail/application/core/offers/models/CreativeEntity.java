@@ -31,7 +31,7 @@ public class CreativeEntity {
     private String unsubscribeImage;
 
     @Column(nullable = false)
-    private boolean isActive = false;
+    private boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name="offer_id", nullable=false)

@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class OfferCreativeController {
 
     private final CreativeOfferService creativeOfferService;
-    private final FileService fileService;
     private final ModelMapper modelMapper;
 
     @GetMapping("")
@@ -35,11 +34,13 @@ public class OfferCreativeController {
     }
 
     @GetMapping("/{creativeId}")
-    public ResponseEntity<String> getCreative (
+    public ResponseEntity<CreativeResponse> getCreative (
             @PathVariable long offerId ,
             @PathVariable long creativeId
     ){
-        return ResponseEntity.ok("offer id " + offerId + " off creative id " +creativeId+" ");
+        var creativeDto = creativeOfferService.getCreative( offerId , creativeId );
+        var creativeResponse = modelMapper.map( creativeDto , CreativeResponse.class );
+        return ResponseEntity.ok(creativeResponse );
     }
 
     @PostMapping

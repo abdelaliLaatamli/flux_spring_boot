@@ -13,7 +13,11 @@ import java.util.Optional;
 @Repository
 public interface CreativeRepository extends JpaRepository<CreativeEntity , Long> {
 
-//    @Query("SELECT o FROM CreativeEntity o WHERE o.id= :offerId")
+
     List<CreativeEntity> findByOfferId(Long offerId );
+
+
+    @Query("SELECT c FROM CreativeEntity c WHERE c.isActive=true and c.id= :creativeId ")
+    Optional<CreativeEntity> findActivatedById( @Param("creativeId") Long creativeId );
 
 }
